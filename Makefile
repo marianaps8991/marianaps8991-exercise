@@ -2,8 +2,7 @@ current_dir = $(shell pwd)
 
 
 
-BIN = code/bin
-CLIENT =  github.com/marianaps8991/exercise/client/
+BIN = bin
 SERVER = api/
 
 
@@ -15,11 +14,10 @@ help:
 	@echo run-client para executar o cliente
 
 #para dar setup
-setup:
-	#setx GOPATH $(current_dir)/golib ; GOPATH $(current_dir)/code 
-	#setx PATH $(current_dir)/golib/bin  
-	
-	go env -w GOPATH=$(current_dir)/golib:$(current_dir)/code
+setup: 
+	mkdir ../golib
+	go env -w GOPATH=$(current_dir)/../golib:$(current_dir)
+	make imports
 	
 
 build: 
@@ -54,5 +52,6 @@ imports:
 	go get -u golang.org/x/crypto/bcrypt
 	go get github.com/go-sql-driver/mysql
 	go get github.com/dgrijalva/jwt-go
+	go get github.com/gorilla/handlers
 	
 

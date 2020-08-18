@@ -20,6 +20,7 @@ func SetMiddlewareLogger(next http.HandlerFunc) http.HandlerFunc {
 func SetMiddlewareJSON(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origins", "*")
 		next(w, r)
 	}
 }
@@ -56,4 +57,19 @@ func SetMiddlewareAdminAuth(next http.HandlerFunc) http.HandlerFunc {
 		}
 		next(w, r)
 	}
+}
+func SetMiddlewareCors(next http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		if r.Method == "OPTIONS" {
+			w.Header().Set("Access-Control-Allow-Methods", "GET,POST, PUT, DELETE")
+
+			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token, Authorization")
+			responses.JSON(w, http.StatusOK, "all set")
+			return
+		} else {
+			next(w, r)
+		}
+	})
 }

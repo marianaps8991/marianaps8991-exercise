@@ -12,6 +12,10 @@ import (
 )
 
 func LogIn(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions{
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -37,5 +41,6 @@ func LogIn(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
+
 	responses.JSON(w, http.StatusOK, tokken)
 }
